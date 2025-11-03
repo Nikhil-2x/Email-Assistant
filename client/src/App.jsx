@@ -27,10 +27,12 @@ const App = () => {
     setLoading(true);
     setResult("");
     try {
-      const response = await axios.post(
-        "http://localhost:8081/api/email/generate",
-        { emailContent, tone }
-      );
+      const API = import.meta.env.VITE_API_URL;
+
+      const response = await axios.post(`${API}/api/email/generate`, {
+        emailContent,
+        tone,
+      });
 
       setResult(
         typeof response.data === "string"
