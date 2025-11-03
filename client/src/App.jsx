@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import LightRays from "./components/LightRays";
+import Shuffle from "./components/Shuffle";
 
 const App = () => {
   const [emailContent, setEmailContent] = useState("");
   const [tone, setTone] = useState("");
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const [result, setResult] = useState("");
 
   const copyToClipboard = async () => {
@@ -26,7 +28,7 @@ const App = () => {
     setResult("");
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/email/generate",
+        "http://localhost:8081/api/email/generate",
         { emailContent, tone }
       );
 
@@ -36,19 +38,49 @@ const App = () => {
           : JSON.stringify(response.data)
       );
     } catch (error) {
+      console.error("Error generating email reply:", error);
+      toast.error("Failed to generate email reply. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 antialiased selection:bg-indigo-500/30 selection:text-white">
-      <div className="mx-auto max-w-3xl px-4 py-10">
+    <div className=" relative min-h-screen bg-neutral-950 text-neutral-100 antialiased selection:bg-indigo-500/30 selection:text-white overflow-hidden ">
+      <LightRays
+        raysOrigin="top-center"
+        raysColor="#00ffff"
+        raysSpeed={2}
+        lightSpread={0.8}
+        rayLength={1.2}
+        followMouse={true}
+        mouseInfluence={0.8}
+        noiseAmount={0.1}
+        distortion={0.05}
+      />
+
+      <div className="mx-auto max-w-3xl px-4 py-10 relative z-10">
         <div className="relative rounded-2xl border border-white/10 bg-neutral-900/60 p-6 shadow-2xl backdrop-blur-md transition-all duration-500">
           <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-[radial-gradient(80%_60%_at_50%_-10%,rgba(79,70,229,0.35),transparent_60%),radial-gradient(60%_60%_at_110%_10%,rgba(16,185,129,0.25),transparent_60%),radial-gradient(60%_60%_at_-10%_110%,rgba(236,72,153,0.25),transparent_60%)]" />
-          <h1 className="mb-6 bg-linear-to-r from-indigo-300 via-teal-200 to-pink-200 bg-clip-text text-center text-2xl font-semibold text-transparent tracking-tight">
+          {/* <h1 className="mb-6 bg-linear-to-r from-indigo-300 via-teal-200 to-pink-200 bg-clip-text text-center text-2xl font-semibold text-transparent tracking-tight">
             Email Reply Assistant
-          </h1>
+            
+          </h1> */}
+          <div className="mb-6 bg-linear-to-r from-indigo-300 via-teal-200 to-pink-200 bg-clip-text text-center text-sm font-semibold  tracking-tight">
+            <Shuffle
+              text="Email Reply Assistant"
+              shuffleDirection="right"
+              duration={0.35}
+              animationMode="evenodd"
+              shuffleTimes={1}
+              ease="power3.out"
+              stagger={0.03}
+              threshold={0.1}
+              triggerOnce={true}
+              triggerOnHover={true}
+              respectReducedMotion={true}
+            />
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Tone + Button row */}
